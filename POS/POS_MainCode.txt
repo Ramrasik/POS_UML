@@ -1,0 +1,469 @@
+'holds current order values
+Dim TD As Integer
+Dim FP As Integer
+Dim VP As Integer
+Dim CB As Integer
+Dim Ex As Integer
+Dim Mac As Integer
+Dim Lat As Integer
+Dim Moca As Integer
+
+'holds current order total price
+Dim TDPrice As Currency
+Dim FBPrice As Currency
+Dim VPPrice As Currency
+Dim CBPrice As Currency
+Dim ExPrice As Currency
+Dim MacPrice As Currency
+Dim LatPrice As Currency
+Dim MocaPrice As Currency
+
+'total sales for order
+Dim Total As Currency
+
+'holds count to update inventory
+Dim TDCount As Integer
+Dim FPCount As Integer
+Dim VPCount As Integer
+Dim CBCount As Integer
+Dim ExCount As Integer
+Dim MacCount As Integer
+Dim LatCount As Integer
+Dim MocaCount As Integer
+Dim Counter As Integer
+Dim clear As Integer
+
+
+
+
+Private Sub cmdExit_Click()
+   Dim Ans As Integer
+   
+   
+    Ans = MsgBox("Are you sure you want to exit?", 3)
+        
+    If Ans = 6 Then
+        MsgBox ("Thank you, Enjoy!")
+        POS.Hide
+
+    End If
+    
+    
+    
+End Sub
+
+
+
+Private Sub ColdBrew_Click()
+CB = CB + 1
+If CBCount < CB Then
+    MsgBox ("Only have " & CBCount & " left")
+    CB = CB - 1
+Else
+    CBL.Caption = CB
+End If
+
+CBPrice = CB * Worksheets("Inventory").Cells(5, "D").Value
+End Sub
+
+
+Private Sub CommandButton10_Click()
+ If MsgBox("Are you sure you want to exit?", 3) = 6 Then
+    POS.Hide
+    
+    Main.Show
+End If
+
+ 
+End Sub
+
+Private Sub Refund_Click()
+    Dim Order As Integer
+    Dim Refund As Currency
+    Dim Amount As Currency
+    
+    Sheet3.Activate
+   
+    
+     Order = InputBox("Order#: Which Order# would you like to refund: ")
+     Refund = InputBox("What is the total amount you want to refund: ")
+     
+        'update Receipt Table
+         
+        Amount = Worksheets("Receipt").Cells(Order, "D").Value
+        Worksheets("Receipt").Cells(Order, "D").Value = Amount - Refund
+        MsgBox "Order#: " & Order & " has been refunded a total of $" & Refund & " dollors!"
+    
+        Worksheets("Receipt").Cells(Order, "E").Value = Total * 0.0625
+        Worksheets("Receipt").Cells(Order, "F").Value = Worksheets("Receipt").Cells(Order, "E").Value + Total
+        MsgBox "Order#: " & Order & " new total is $" & Worksheets("Receipt").Cells(Order, "F").Value
+End Sub
+
+Private Sub Reset_Click()
+
+
+'Resets all values
+TD = 0
+TDCount = 0
+LTD = 0
+TDPrice = 0
+
+FP = 0
+FPCount = 0
+FPL = 0
+FPPrice = 0
+
+VP = 0
+VPCount = 0
+VPL = 0
+VPPrice = 0
+
+CB = 0
+CBCount = 0
+CBL = 0
+CBPrice = 0
+
+Ex = 0
+ExCount = 0
+EXL = 0
+ExPrice = 0
+
+Mac = 0
+MacCount = 0
+MacL = 0
+MacPrice = 0
+
+Lat = 0
+LatCount = 0
+LatL = 0
+LatPrice = 0
+
+Moca = 0
+MocaCount = 0
+MocaL = 0
+MocaPrice = 0
+
+LTotal = 0
+
+VPCount = Worksheets("Inventory").Cells(4, "C").Value
+FPCount = Worksheets("Inventory").Cells(3, "C").Value
+LatCount = Worksheets("Inventory").Cells(8, "C").Value
+MacCount = Worksheets("Inventory").Cells(7, "C").Value
+MocaCount = Worksheets("Inventory").Cells(9, "C").Value
+ExCount = Worksheets("Inventory").Cells(6, "C").Value
+CBCount = Worksheets("Inventory").Cells(5, "C").Value
+TDCount = Worksheets("Inventory").Cells(2, "C").Value
+
+End Sub
+
+
+Private Sub Expresso_Click()
+
+Ex = Ex + 1
+If ExCount < Ex Then
+    MsgBox ("Only have " & ExCount & " left")
+    Ex = Ex - 1
+Else
+    EXL.Caption = Ex
+End If
+
+ExPrice = Ex * Worksheets("Inventory").Cells(5, "D").Value
+End Sub
+
+Private Sub FrenchPress_Click()
+FP = FP + 1
+If FPCount < FP Then
+    MsgBox ("Only have " & FPCount & " left")
+    FP = FP - 1
+Else
+    FPL.Caption = FP
+End If
+
+FPPrice = FP * Worksheets("Inventory").Cells(3, "D").Value
+End Sub
+
+
+Private Sub Latte_Click()
+Lat = Lat + 1
+If LatCount < Lat Then
+    MsgBox ("Only have " & LatCount & " left")
+    Lat = Lat - 1
+Else
+    LatL.Caption = Lat
+End If
+
+LatPrice = Lat * Worksheets("Inventory").Cells(8, "D").Value
+End Sub
+
+Private Sub Macchiato_Click()
+Mac = Mac + 1
+If MacCount < Mac Then
+    MsgBox ("Only have " & MacCount & " left")
+    Mac = Mac - 1
+Else
+    MacL.Caption = Mac
+End If
+
+MacPrice = Mac * Worksheets("Inventory").Cells(7, "D").Value
+End Sub
+
+
+Private Sub Mochaa_Click()
+Moca = Moca + 1
+If MocaCount < Moca Then
+    MsgBox ("Only have " & MocaCount & " left")
+    VP = VP - 1
+Else
+    MocaL.Caption = Moca
+End If
+
+MocaPrice = Moca * Worksheets("Inventory").Cells(9, "D").Value
+End Sub
+
+Private Sub PAY_Click()
+    Dim Amount As String
+    Dim LastRow As Long
+    Dim Counter2 As Integer
+    Dim clear As Integer
+    
+    clear = 11
+    Counter2 = 11
+     
+    
+    Amount = InputBox("CALCULATOR: Enter total Cash Amount:")
+    If IsNumeric(Amount) Then
+        MsgBox "CHANGE: Please return " & Amount - Total & " dollars!"
+    
+        'write total values to specif cells
+        'counts the number of times each item has been bought and stores/updates the specific cell
+    
+        TDCount = TDCount - TD
+        Worksheets("Inventory").Cells(2, "C").Value = TDCount
+        Worksheets("Inventory").Cells(2, "E").Value = Worksheets("Inventory").Cells(2, "E").Value + TD
+        
+        FPCount = FPCount - FP
+        Worksheets("Inventory").Cells(3, "C").Value = FPCount
+        Worksheets("Inventory").Cells(3, "E").Value = Worksheets("Inventory").Cells(3, "E").Value + FB
+        
+        VPCount = VPCount - VP
+        Worksheets("Inventory").Cells(4, "C").Value = VPCount
+        Worksheets("Inventory").Cells(4, "E").Value = Worksheets("Inventory").Cells(4, "E").Value + VP
+        
+        CBCount = CBCount - CB
+        Worksheets("Inventory").Cells(5, "C").Value = CBCount
+        Worksheets("Inventory").Cells(5, "E").Value = Worksheets("Inventory").Cells(5, "E").Value + CB
+        
+        ExCount = ExCount - Ex
+        Worksheets("Inventory").Cells(6, "C").Value = ExCount
+        Worksheets("Inventory").Cells(6, "E").Value = Worksheets("Inventory").Cells(6, "E").Value + Ex
+        
+        MacCount = MacCount - Mac
+        Worksheets("Inventory").Cells(7, "C").Value = MacCount
+        Worksheets("Inventory").Cells(7, "E").Value = Worksheets("Inventory").Cells(7, "E").Value + Mac
+        
+        LatCount = LatCount - Lat
+        Worksheets("Inventory").Cells(3, "C").Value = LatCount
+        Worksheets("Inventory").Cells(3, "E").Value = Worksheets("Inventory").Cells(3, "E").Value + Lat
+        
+        MocaCount = MocaCount - Moca
+        Worksheets("Inventory").Cells(3, "C").Value = TDCount
+        Worksheets("Inventory").Cells(3, "E").Value = Worksheets("Inventory").Cells(3, "E").Value + Moca
+    
+        
+        'update Receipt Table
+        Worksheets("Receipt").Cells(Counter, "A").Value = Counter
+        Worksheets("Receipt").Cells(Counter, "B").Value = Date
+        Worksheets("Receipt").Cells(Counter, "C").Value = Time
+        
+        Worksheets("Receipt").Cells(Counter, "D").Value = Total
+        
+        Worksheets("Receipt").Cells(Counter, "E").Value = Total * 0.0625
+        Worksheets("Receipt").Cells(Counter, "F").Value = Worksheets("Receipt").Cells(Counter, "E").Value + Total
+          
+        'generate customer Receipt for printing
+        Worksheets("PrintReceipt").Cells(9, "B").Value = Counter
+        Worksheets("PrintReceipt").Cells(8, "B").Value = Date
+        Worksheets("PrintReceipt").Cells(8, "D").Value = Time
+          
+        'fills receipt with order
+        If TD > 0 Then
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = "Traditional Drip"
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = TD
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = TDPrice
+            Counter2 = Counter2 + 1
+        End If
+        
+        
+        If FP > 0 Then
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = "French Press"
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = FP
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = FPPrice
+            Counter2 = Counter2 + 1
+        
+        End If
+        
+        
+        If VP > 0 Then
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = "Vacuum Pot"
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = VP
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = VPPrice
+            Counter2 = Counter2 + 1
+        End If
+        
+        If CB > 0 Then
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = "Cold Brew"
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = CB
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = CBPrice
+            Counter2 = Counter2 + 1
+        End If
+        
+        
+         If Ex > 0 Then
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = "Expresso"
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = Ex
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = ExPrice
+            Counter2 = Counter2 + 1
+        End If
+        
+         If Mac > 0 Then
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = "Macciato"
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = Mac
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = MacPrice
+            Counter2 = Counter2 + 1
+        End If
+        
+        If Lat > 0 Then
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = "Latte"
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = Lat
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = LatPrice
+            Counter2 = Counter2 + 1
+        End If
+        
+         If Moca > 0 Then
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = "Moca"
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = Moca
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = MocaPrice
+            Counter2 = Counter2 + 1
+        End If
+        
+        
+        'clears receipt for the next order
+        Do While Counter2 < 19
+            Worksheets("PrintReceipt").Cells(Counter2, "A").Value = ""
+            Worksheets("PrintReceipt").Cells(Counter2, "C").Value = ""
+            Worksheets("PrintReceipt").Cells(Counter2, "E").Value = ""
+            Counter2 = Counter2 + 1
+        Loop
+        
+        'tax and total amount on receipt
+        Worksheets("PrintReceipt").Cells(20, "E").Value = Total * 0.0625
+        Worksheets("PrintReceipt").Cells(21, "E").Value = Worksheets("PrintReceipt").Cells(20, "E").Value + Total
+        Worksheets("PrintReceipt").Cells(23, "E").Value = Amount - Total
+        
+        
+
+        'PRINTS THE RECEIPT
+        'Sheet5.PrintPreview
+        Sheet5.Activate
+        
+        
+        
+        Counter = Counter + 1
+        'resets all for next order
+        TD = 0
+        LTD = 0
+            
+        FP = 0
+        FPL = 0
+        
+        VP = 0
+        VPL = 0
+        
+        CB = 0
+        CBL = 0
+        
+        Ex = 0
+        EXL = 0
+        
+        Mac = 0
+        MacL = 0
+        
+        Lat = 0
+        LatL = 0
+        
+        Moca = 0
+        MocaL = 0
+        
+        'updates inventory itesm to variable
+        VPCount = Worksheets("Inventory").Cells(4, "C").Value
+        FPCount = Worksheets("Inventory").Cells(3, "C").Value
+        LatCount = Worksheets("Inventory").Cells(8, "C").Value
+        MacCount = Worksheets("Inventory").Cells(7, "C").Value
+        MocaCount = Worksheets("Inventory").Cells(9, "C").Value
+        ExCount = Worksheets("Inventory").Cells(6, "C").Value
+        CBCount = Worksheets("Inventory").Cells(5, "C").Value
+        TDCount = Worksheets("Inventory").Cells(2, "C").Value
+        
+        LTotal = 0
+        
+        Counter2 = 11
+    Else
+        MsgBox "INVALID INPUT: Please enter a Number only !!"
+    End If
+
+End Sub
+
+
+Private Sub TotalP_Click()
+
+'calculate total price
+Total = TDPrice + FPPrice + VPPrice + CBPrice + ExpPrice + MacPrice + LatPrice + MocaPrice
+LTotal.Caption = Total
+
+End Sub
+
+
+Private Sub Traditional_Click()
+TD = TD + 1
+If TDCount < TD Then
+MsgBox ("Only have " & TDCount & " left")
+TD = TD - 1
+Else
+
+LTD.Caption = TD
+End If
+
+TDPrice = TD * Worksheets("Inventory").Cells(2, "D").Value
+
+End Sub
+
+
+
+Private Sub UserForm_Initialize()
+Counter = 2
+clear = 10
+
+VPCount = Worksheets("Inventory").Cells(4, "C").Value
+FPCount = Worksheets("Inventory").Cells(3, "C").Value
+LatCount = Worksheets("Inventory").Cells(8, "C").Value
+MacCount = Worksheets("Inventory").Cells(7, "C").Value
+MocaCount = Worksheets("Inventory").Cells(9, "C").Value
+ExCount = Worksheets("Inventory").Cells(6, "C").Value
+CBCount = Worksheets("Inventory").Cells(5, "C").Value
+TDCount = Worksheets("Inventory").Cells(2, "C").Value
+
+
+
+End Sub
+
+Private Sub VacuPot_Click()
+VP = VP + 1
+If FPCount < FP Then
+    MsgBox ("Only have " & VPCount & " left")
+    VP = VP - 1
+Else
+    VPL.Caption = VP
+End If
+
+VPPrice = VP * Worksheets("Inventory").Cells(4, "D").Value
+End Sub
